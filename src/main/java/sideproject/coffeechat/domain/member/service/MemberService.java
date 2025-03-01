@@ -26,7 +26,21 @@ import sideproject.coffeechat.global.security.jwt.TokenInfo;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final SocialServiceManager socialServiceManager;
     private final JwtTokenUtil jwtTokenUtil;
+
+    public LoginResponse socialLogin(LoginRequest request) {
+        SocialType socialType = request.getSocialType();
+        String username = socialServiceManager.login(socialType, request.getToken());
+
+        Member member = getOrRegisterMember(username, socialType);
+        TokenInfo tokenInfo = generateToken(member);
+
+        if (member.getNickname() == null) {
+            return new LoginResponse(true, tokenInfo);
+        }
+        return new LoginResponse(false, tokenInfo);
+    }
 
     private TokenInfo generateToken(Member member) {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

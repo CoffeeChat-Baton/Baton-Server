@@ -24,4 +24,9 @@ public class MemberController {
         return Response.success(memberService.devLogin(request));
     }
 
+    @PostMapping("/login/social")
+    public Response<LoginResponse> socialLogin(@RequestBody @Valid LoginRequest request) {
+        return Response.success(memberService.socialLogin(request));
+    }
+
 }
