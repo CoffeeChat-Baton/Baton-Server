@@ -29,5 +29,14 @@ public class WorkerController {
         return Response.success();
     }
 
+    @GetMapping("/job-list")
+    public Response<List<JobResponse>> getJobs() {
+        return Response.success(workerService.getJobs());
+    }
+
+    @GetMapping("/subjob-list/{jobId}")
+    public Response<List<SubJobResponse>> getSubJobsByJobId(@PathVariable Long jobId) {
+        return Response.success(workerService.getSubJobsByJobId(jobId));
+    }
 
 }
