@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import sideproject.coffeechat.domain.member.dto.converter.JobConverter;
 import sideproject.coffeechat.domain.member.dto.request.WorkerJoinRequest;
 import sideproject.coffeechat.domain.member.dto.response.JobResponse;
@@ -24,6 +25,7 @@ import sideproject.coffeechat.domain.member.repository.JobRepository;
 import sideproject.coffeechat.domain.member.repository.SubJobRepository;
 import sideproject.coffeechat.domain.member.repository.WorkerMapper;
 import sideproject.coffeechat.domain.member.repository.WorkerRepository;
+import sideproject.coffeechat.global.aws.S3Uploader;
 import sideproject.coffeechat.global.response.code.ErrorCode;
 import sideproject.coffeechat.global.response.exception.MemberException;
 
@@ -57,6 +59,17 @@ public class WorkerService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public List<JobResponse> getJobs() {
+        List<Job> jobs = jobRepository.findAll(Sort.by(Direction.ASC, "id"));
+        return JobConverter.toJobResponseList(jobs);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SubJobResponse> getSubJobsByJobId(Long jobId) {
+        List<SubJob> subJobs = subJobRepository.findByJobIdOrderById(jobId);
+        return JobConverter.toSubJobResponseList(subJobs);
+    }
 
     public Map<String, String> validateAndGetCustomJobNames(Long jobId, String customJobName,
                                                             Long subJobId, String customSubJobName) {
@@ -85,7 +98,7 @@ public class WorkerService {
         }
 
         return Map.of(
-                "jobName", isJobEtc ? customJobName  : job.getJobName(),
+                "jobName", isJobEtc ? customJobName : job.getJobName(),
                 "subJobName", isSubJobEtc ? customSubJobName : subJob.getSubJobName()
         );
     }
