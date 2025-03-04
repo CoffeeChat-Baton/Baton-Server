@@ -7,4 +7,7 @@ import sideproject.coffeechat.domain.member.entity.SubJob;
 
 @Repository
 public interface SubJobRepository extends JpaRepository<SubJob, Long> {
+
+    List<SubJob> findByJobIdOrderById(Long jobId);
+
 }
