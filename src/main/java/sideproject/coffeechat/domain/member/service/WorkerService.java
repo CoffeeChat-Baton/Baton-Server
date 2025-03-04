@@ -102,4 +102,11 @@ public class WorkerService {
                 "subJobName", isSubJobEtc ? customSubJobName : subJob.getSubJobName()
         );
     }
+
+    public Worker validateWorker(String username) {
+        return workerRepository.findByUsername(username)
+                .orElseThrow(() -> new MemberException(ErrorCode.WORKER_NOT_FOUND,
+                        "Member should be WORKER to apply mentor"));
+    }
+
 }
