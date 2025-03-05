@@ -36,24 +36,14 @@ public class MentorRegisterRequest {
     @NotNull
     @Size(max = 3)
     @Valid
-    private List<TimeSlotRequest> timeSlots;
+    @UniquePriority(message = "TimeSlot priorities must be unique.")
+    private List<TimeSlotRequest> availableSchedules;
 
     @NotNull
     private String shortDescription;
 
     @NotNull
     private String detailedDescription;
-
-    @AssertTrue(message = "The priority values of TimeSlots must be unique.")
-    public boolean isTimeSlotsPriorityUnique() {
-        Set<Integer> prioritySet = new HashSet<>();
-        for (TimeSlotRequest slot : timeSlots) {
-            if (!prioritySet.add(slot.getPriority())) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Getter
     @AllArgsConstructor
