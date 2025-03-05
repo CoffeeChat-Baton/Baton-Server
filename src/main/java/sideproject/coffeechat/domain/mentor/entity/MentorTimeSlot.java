@@ -40,7 +40,7 @@ public class MentorTimeSlot {
     private Mentor mentor;
 
     @ElementCollection
-    @CollectionTable(name = "time_slot_days", joinColumns = @JoinColumn(name = "time_slot_id"))
+    @CollectionTable(name = "mentor_time_slot_days", joinColumns = @JoinColumn(name = "mentor_time_slot_id"))
     @Column(name = "day_of_week")
     @Enumerated(EnumType.STRING)
     private List<DayOfWeek> availableDays;

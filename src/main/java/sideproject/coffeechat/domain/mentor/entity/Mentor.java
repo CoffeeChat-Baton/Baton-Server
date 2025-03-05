@@ -45,7 +45,7 @@ public class Mentor extends BaseEntity {
 
     @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<MentorTimeSlot> timeSlots = new ArrayList<>();
+    private List<MentorTimeSlot> availableSchedules = new ArrayList<>();
 
     public void updateShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
@@ -55,9 +55,9 @@ public class Mentor extends BaseEntity {
         this.detailedDescription = detailedDescription;
     }
 
-    public void updateTimeSlots(List<MentorTimeSlot> timeSlots) {
-        this.timeSlots.clear();
-        this.timeSlots.addAll(timeSlots);
+    public void updateAvailableSchedules(List<MentorTimeSlot> availableSchedules) {
+        this.availableSchedules.clear();
+        this.availableSchedules.addAll(availableSchedules);
     }
 
 }
