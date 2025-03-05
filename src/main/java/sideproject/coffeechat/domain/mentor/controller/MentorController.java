@@ -20,6 +20,17 @@ public class MentorController {
 
     private final MentorService mentorService;
 
+    // TODO: 멘토 인증 API 완성하기
+    @PostMapping("/upload-certification")
+    public Response<Void> certifyMentor(@RequestParam MultipartFile file, Authentication authentication) {
+        try {
+            mentorService.sendEmailToAdmin(file, authentication.getName());
+            return Response.success();
+        } catch (Exception e) {
+            return Response.error("파일 업로드 실패");
+        }
+    }
+
     // TODO: 임시 멘토 생성 API
     @PostMapping("/create")
     public Response<Void> create(@RequestParam String companyName, Authentication authentication) {
