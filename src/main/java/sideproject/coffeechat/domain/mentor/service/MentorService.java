@@ -26,6 +26,13 @@ public class MentorService {
 
     private final WorkerService workerService;
     private final MentorRepository mentorRepository;
+    private final EmailService emailService;
+
+    public void sendEmailToAdmin(MultipartFile file, String username) throws MessagingException, IOException {
+        workerService.validateWorker(username);
+        emailService.sendEmailWithAttachment("imhajung@gmail.com", file);
+    }
+
     public void create(String companyName, String username) {
         Worker worker = workerService.validateWorker(username);
         worker.addRole(Role.ROLE_MENTOR);
@@ -42,14 +49,37 @@ public class MentorService {
         Worker worker = workerService.validateWorker(username);
         updateWorkerInfo(request, worker);
 
-        Mentor mentor = validateMentor(worker.getId());
+        Mentor mentor = findByWorkerId(worker.getId());
         updateMentorInfo(request, mentor);
     }
 
-    private Mentor validateMentor(Long workerId) {
+    private void updateWorkerInfo(MentorRegisterRequest request, Worker worker) {
+        Map<String, String> jobNames = workerService.validateAndGetCustomJobNames(
+                request.getJobId(), request.getCustomJobName(),
+                request.getSubJobId(), request.getCustomSubJobName()
+        );
+
+        worker.updateJob(request.getJobId(), jobNames.get("jobName"));
+        worker.updateSubJob(request.getSubJobId(), jobNames.get("subJobName"));
+        worker.updateCareerYears(request.getCareerYears());
+    }
+
+    private void updateMentorInfo(MentorRegisterRequest request, Mentor mentor) {
+        List<MentorTimeSlot> availableSchedules = MentorConverter
+                .toMentorTimeSlotList(request.getAvailableSchedules(), mentor);
+        mentor.updateShortDescription(request.getShortDescription());
+        mentor.updateDetailedDescription(request.getDetailedDescription());
+        mentor.updateAvailableSchedules(availableSchedules);
+    }
+
+    public Mentor findByWorkerId(Long workerId) {
         return mentorRepository.findByWorkerId(workerId)
                 .orElseThrow(() -> new MentorException(ErrorCode.MENTOR_NOT_FOUND, "Not Registered Mentor"));
     }
 
+    public Mentor findByMentorId(Long mentorId) {
+        return mentorRepository.findById(mentorId)
+                .orElseThrow(() -> new MentorException(ErrorCode.MENTOR_NOT_FOUND, "Not Registered Mentor"));
+    }
 
 }
