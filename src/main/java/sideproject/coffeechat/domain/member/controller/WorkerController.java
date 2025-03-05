@@ -7,9 +7,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import sideproject.coffeechat.domain.member.dto.request.WorkerJoinRequest;
 import sideproject.coffeechat.domain.member.dto.response.JobResponse;
 import sideproject.coffeechat.domain.member.dto.response.SubJobResponse;
@@ -24,8 +25,12 @@ public class WorkerController {
     private final WorkerService workerService;
 
     @PostMapping("/join")
-    public Response<Void> joinWorker(@RequestBody @Valid WorkerJoinRequest request, Authentication authentication) {
-        workerService.join(request, authentication.getName());
+    public Response<Void> joinWorker(
+            @RequestPart @Valid WorkerJoinRequest request,
+            @RequestPart(required = false) MultipartFile profileImage,
+            Authentication authentication
+    ) {
+        workerService.join(request, profileImage, authentication.getName());
         return Response.success();
     }
 

@@ -13,8 +13,7 @@ public interface WorkerMapper {
             job_id = #{jobId}, job_name = #{jobName},
             sub_job_id = #{subJobId}, sub_job_name = #{subJobName},
             career_years = #{careerYears},
-            email = #{email},
-            profile_image_url = #{profileImageUrl}
+            email = #{email}
         WHERE member_id = #{memberId};
     """)
     void joinWorker(Long memberId,
@@ -22,7 +21,6 @@ public interface WorkerMapper {
                     Long jobId, String jobName,
                     Long subJobId, String subJobName,
                     int careerYears,
-                    String email,
-                    String profileImageUrl);
+                    String email);
 
 }
