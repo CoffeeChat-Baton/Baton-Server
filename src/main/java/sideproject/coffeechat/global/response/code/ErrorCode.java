@@ -19,6 +19,9 @@ public enum ErrorCode {
 
     // MentorException
     MENTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "Mentor not found."),
+
+    //CustomException
+    S3_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S3 error."),
     ;
 
     private final HttpStatus httpStatus;
