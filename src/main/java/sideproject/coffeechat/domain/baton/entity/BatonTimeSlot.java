@@ -1,20 +1,15 @@
-package sideproject.coffeechat.domain.mentor.entity;
+package sideproject.coffeechat.domain.baton.entity;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,27 +23,27 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-public class MentorTimeSlot {
+public class BatonTimeSlot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mentor_id")
+    @JoinColumn(name = "baton_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Mentor mentor;
+    private Baton baton;
 
-    @ElementCollection
-    @CollectionTable(name = "mentor_time_slot_days", joinColumns = @JoinColumn(name = "mentor_time_slot_id"))
-    @Column(name = "day_of_week")
-    @Enumerated(EnumType.STRING)
-    private List<DayOfWeek> availableDays;
+    @Column(nullable = false)
+    private LocalDate date;
 
+    @Column(nullable = false)
     private LocalTime startTime;
 
+    @Column(nullable = false)
     private LocalTime endTime;
 
+    @Column(nullable = false)
     private int priority;
 
 }

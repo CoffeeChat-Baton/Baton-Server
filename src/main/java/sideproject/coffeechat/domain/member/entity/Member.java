@@ -93,4 +93,7 @@ public abstract class Member extends BaseEntity implements UserDetails {
         this.roles.add(role);
     }
 
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 }
