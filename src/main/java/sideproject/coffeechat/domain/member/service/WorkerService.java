@@ -41,9 +41,15 @@ public class WorkerService {
     private final WorkerMapper workerMapper;
     private final JobRepository jobRepository;
     private final SubJobRepository subJobRepository;
+    private final S3Uploader s3Uploader;
 
-    public void join(WorkerJoinRequest request, String username) {
+    public void join(WorkerJoinRequest request, MultipartFile profileImage, String username) {
         Member member = memberService.getMemberByUsername(username);
+        saveWorker(request, member);
+        uploadProfileImage(member, profileImage);
+    }
+
+    private void saveWorker(WorkerJoinRequest request, Member member) {
         Map<String, String> jobNames = validateAndGetCustomJobNames(
                 request.getJobId(), request.getCustomJobName(),
                 request.getSubJobId(), request.getCustomSubJobName()
@@ -54,9 +60,14 @@ public class WorkerService {
                 request.getJobId(), jobNames.get("jobName"),
                 request.getSubJobId(), jobNames.get("subJobName"),
                 request.getCareerYears(),
-                request.getEmail(),
-                request.getProfileImageUrl()
+                request.getEmail()
         );
+    }
+
+    private void uploadProfileImage(Member member, MultipartFile profileImage) {
+        String prefix = member.getId() + "/profile/";
+        String profileImageUrl = s3Uploader.upload(prefix, profileImage);
+        member.updateProfileImageUrl(profileImageUrl);
     }
 
     @Transactional(readOnly = true)
@@ -107,6 +118,11 @@ public class WorkerService {
         return workerRepository.findByUsername(username)
                 .orElseThrow(() -> new MemberException(ErrorCode.WORKER_NOT_FOUND,
                         "Member should be WORKER to apply mentor"));
+    }
+
+    public Worker getWorkerById(Long workerId) {
+        return workerRepository.findById(workerId)
+                .orElseThrow(() -> new MemberException(WORKER_NOT_FOUND));
     }
 
 }

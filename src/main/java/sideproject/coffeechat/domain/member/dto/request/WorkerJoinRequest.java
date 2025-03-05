@@ -38,6 +38,4 @@ public class WorkerJoinRequest {
     @Email
     private String email;
 
-    private String profileImageUrl;
-
 }
