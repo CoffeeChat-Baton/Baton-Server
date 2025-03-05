@@ -1,17 +1,18 @@
 package sideproject.coffeechat.domain.mentor.dto.request;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sideproject.coffeechat.global.validator.HasPriority;
+import sideproject.coffeechat.global.validator.TimeRangeProvider;
+import sideproject.coffeechat.global.validator.UniquePriority;
+import sideproject.coffeechat.global.validator.ValidStartEndTime;
 
 @Getter
 @AllArgsConstructor
@@ -48,7 +49,8 @@ public class MentorRegisterRequest {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class TimeSlotRequest {
+    @ValidStartEndTime
+    public static class TimeSlotRequest implements HasPriority, TimeRangeProvider {
 
         @NotNull
         private List<DayOfWeek> availableDays;
@@ -62,10 +64,6 @@ public class MentorRegisterRequest {
         @NotNull
         private int priority;
 
-        @AssertTrue(message = "StartTime must be before EndTime")
-        public boolean isValidTimeRange() {
-            return startTime.isBefore(endTime);
-        }
     }
 
 }
