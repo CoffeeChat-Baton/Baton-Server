@@ -26,4 +26,11 @@ public class MentorController {
         mentorService.create(companyName, authentication.getName());
         return Response.success();
     }
+
+    @PostMapping("/register")
+    public Response<Void> register(@RequestBody @Valid MentorRegisterRequest request, Authentication authentication) {
+        mentorService.register(request, authentication.getName());
+        return Response.success();
+    }
+
 }

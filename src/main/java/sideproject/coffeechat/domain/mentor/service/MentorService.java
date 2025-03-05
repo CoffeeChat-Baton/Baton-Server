@@ -38,5 +38,18 @@ public class MentorService {
         );
     }
 
+    public void register(MentorRegisterRequest request, String username) {
+        Worker worker = workerService.validateWorker(username);
+        updateWorkerInfo(request, worker);
+
+        Mentor mentor = validateMentor(worker.getId());
+        updateMentorInfo(request, mentor);
+    }
+
+    private Mentor validateMentor(Long workerId) {
+        return mentorRepository.findByWorkerId(workerId)
+                .orElseThrow(() -> new MentorException(ErrorCode.MENTOR_NOT_FOUND, "Not Registered Mentor"));
+    }
+
 
 }

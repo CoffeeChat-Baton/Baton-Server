@@ -16,6 +16,9 @@ public enum ErrorCode {
     JOB_NOT_FOUND(HttpStatus.BAD_REQUEST, "Job not found."),
     SUB_JOB_NOT_FOUND(HttpStatus.BAD_REQUEST, "SubJob not found."),
     JOB_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "Job error."),
+
+    // MentorException
+    MENTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "Mentor not found."),
     ;
 
     private final HttpStatus httpStatus;
