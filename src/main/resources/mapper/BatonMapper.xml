@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sideproject.coffeechat.domain.baton.repository.BatonMapper">
+
+    <select id="getBatonStatusCounts" resultType="map">
+        SELECT
+            COUNT(CASE WHEN status = 'REQUESTED' THEN 1 END) AS requestedCount,
+            COUNT(CASE WHEN status = 'ACCEPTED' THEN 1 END) AS acceptedCount,
+            COUNT(CASE WHEN status = 'REJECTED' THEN 1 END) AS rejectedCount,
+            COUNT(CASE WHEN status = 'COMPLETED' THEN 1 END) AS completedCount
+        FROM baton
+        WHERE mentor_id = #{mentorId}
+    </select>
+
+</mapper>
