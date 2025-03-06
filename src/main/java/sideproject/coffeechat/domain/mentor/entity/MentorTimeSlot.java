@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -43,6 +44,7 @@ public class MentorTimeSlot {
     @CollectionTable(name = "mentor_time_slot_days", joinColumns = @JoinColumn(name = "mentor_time_slot_id"))
     @Column(name = "day_of_week")
     @Enumerated(EnumType.STRING)
+    @BatchSize(size = 10)
     private List<DayOfWeek> availableDays;
 
     private LocalTime startTime;
