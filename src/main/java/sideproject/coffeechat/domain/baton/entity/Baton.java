@@ -48,6 +48,7 @@ public class Baton {
     private String attachmentUrl;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BatonStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)

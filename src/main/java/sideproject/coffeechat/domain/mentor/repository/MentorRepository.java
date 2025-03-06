@@ -11,4 +11,7 @@ public interface MentorRepository extends JpaRepository<Mentor, Long> {
 
     Optional<Mentor> findByWorkerId(Long workerId);
 
+    @EntityGraph(attributePaths = {"availableSchedules"})
+    Optional<Mentor> findWithAvailableSchedulesById(Long mentorId);
+
 }
