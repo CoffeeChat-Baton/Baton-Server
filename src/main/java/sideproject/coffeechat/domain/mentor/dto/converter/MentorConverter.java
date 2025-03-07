@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import sideproject.coffeechat.domain.member.entity.Worker;
+import sideproject.coffeechat.domain.mentor.dto.CompactMentorDTO;
 import sideproject.coffeechat.domain.mentor.dto.request.MentorRegisterRequest.TimeSlotRequest;
+import sideproject.coffeechat.domain.mentor.dto.response.CompactMentorResponse;
 import sideproject.coffeechat.domain.mentor.dto.response.MentorResponse;
 import sideproject.coffeechat.domain.mentor.dto.response.MentorResponse.MentorTimeSlotResponse;
 import sideproject.coffeechat.domain.mentor.entity.Mentor;
@@ -58,4 +60,22 @@ public class MentorConverter {
                 }).toList();
     }
 
+    public static List<CompactMentorResponse> toCompactMentorResponses(List<CompactMentorDTO> dtos) {
+        return dtos.stream()
+                .map(dto -> {
+                    return CompactMentorResponse.builder()
+                            .mentorId(dto.getMentorId())
+                            .profileImageUrl(dto.getProfileImageUrl())
+                            .nickname(dto.getNickname())
+                            .companyName(dto.getCompanyName())
+                            .jobName(dto.getJobName())
+                            .subJobName(dto.getSubJobName())
+                            .careerYears(dto.getCareerYears())
+                            .shortDescription(dto.getShortDescription())
+                            .mentoringCount(dto.getMentoringCount())
+                            .responseRate(dto.getResponseRate())
+                            .isBookmarked(dto.isBookmarked())
+                            .build();
+                }).toList();
+    }
 }

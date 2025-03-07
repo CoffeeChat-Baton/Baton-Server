@@ -13,12 +13,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sideproject.coffeechat.domain.baton.service.BatonViewService;
+import sideproject.coffeechat.domain.member.entity.Member;
 import sideproject.coffeechat.domain.member.entity.Worker;
+import sideproject.coffeechat.domain.member.service.MemberService;
 import sideproject.coffeechat.domain.member.service.WorkerService;
+import sideproject.coffeechat.domain.mentor.dto.CompactMentorDTO;
 import sideproject.coffeechat.domain.mentor.dto.converter.MentorConverter;
 import sideproject.coffeechat.domain.mentor.dto.response.CompactMentorResponse;
 import sideproject.coffeechat.domain.mentor.dto.response.MentorResponse;
 import sideproject.coffeechat.domain.mentor.entity.Mentor;
+import sideproject.coffeechat.domain.mentor.entity.SortBy;
+import sideproject.coffeechat.domain.mentor.repository.MentorMapper;
 import sideproject.coffeechat.domain.mentor.repository.MentorRepository;
 import sideproject.coffeechat.global.response.code.ErrorCode;
 import sideproject.coffeechat.global.response.exception.MentorException;
@@ -29,6 +34,8 @@ import sideproject.coffeechat.global.response.exception.MentorException;
 public class MentorViewService {
 
     private final MentorRepository mentorRepository;
+    private final MentorMapper mentorMapper;
+    private final MemberService memberService;
     private final WorkerService workerService;
     private final BatonViewService batonViewService;
 
@@ -58,6 +65,17 @@ public class MentorViewService {
 
     private static Long getMentoringCount(Map<String, Long> countMap) {
         return countMap.get(REQUESTED.getCountKey());
+    }
+
+    public List<CompactMentorResponse> getMentorsInJob(
+            Long jobId, Long subJobId, String username, int page, int size, SortBy sortBy
+    ) {
+        Member member = memberService.getMemberByUsername(username);
+        int offset = (page - 1) * size;
+        List<CompactMentorDTO> compactMentorDTOS = mentorMapper.findMentorsByJobId(
+                jobId, subJobId, member.getId(), size, offset, sortBy.getValue());
+
+        return MentorConverter.toCompactMentorResponses(compactMentorDTOS);
     }
 
 }
