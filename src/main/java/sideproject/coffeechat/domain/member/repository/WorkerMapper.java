@@ -14,7 +14,7 @@ public interface WorkerMapper {
             sub_job_id = #{subJobId}, sub_job_name = #{subJobName},
             career_years = #{careerYears},
             email = #{email}
-        WHERE member_id = #{memberId};
+        WHERE members.id = #{memberId};
     """)
     void joinWorker(Long memberId,
                     String nickname,
