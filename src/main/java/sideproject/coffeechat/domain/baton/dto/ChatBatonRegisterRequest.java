@@ -1,6 +1,5 @@
 package sideproject.coffeechat.domain.baton.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,7 +18,7 @@ import sideproject.coffeechat.global.validator.ValidStartEndTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BatonRegisterRequest {
+public class ChatBatonRegisterRequest {
 
     @NotNull
     private Charge charge;
@@ -30,7 +29,7 @@ public class BatonRegisterRequest {
     @UniquePriority(message = "TimeSlot priorities must be unique.")
     private List<TimeSlotRequest> availableSchedules;
 
-    @Column(nullable = false)
+    @NotNull
     private String preQuestion;
 
     @Getter
