@@ -78,7 +78,7 @@ public class WorkerService {
 
     @Transactional(readOnly = true)
     public List<SubJobResponse> getSubJobsByJobId(Long jobId) {
-        List<SubJob> subJobs = subJobRepository.findByJobIdOrderById(jobId);
+        List<SubJob> subJobs = subJobRepository.findByJobIdOrderByIdAsc(jobId);
         return JobConverter.toSubJobResponseList(subJobs);
     }
 
