@@ -1,4 +1,4 @@
-package sideproject.coffeechat.domain.baton.dto;
+package sideproject.coffeechat.domain.baton.dto.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
