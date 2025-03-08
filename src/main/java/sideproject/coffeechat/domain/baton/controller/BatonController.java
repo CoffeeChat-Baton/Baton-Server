@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import sideproject.coffeechat.domain.baton.dto.ChatBatonRegisterRequest;
+import sideproject.coffeechat.domain.baton.dto.request.ChatBatonRegisterRequest;
+import sideproject.coffeechat.domain.baton.dto.request.PortfolioBatonRegisterRequest;
+import sideproject.coffeechat.domain.baton.dto.request.ResumeBatonRegisterRequest;
 import sideproject.coffeechat.domain.baton.service.BatonService;
 import sideproject.coffeechat.global.response.Response;
 
@@ -27,7 +29,29 @@ public class BatonController {
             @RequestPart(required = false) MultipartFile attachment,
             Authentication authentication
     ) {
-        batonService.registerChatBaton(mentorId, request, attachment, authentication.getName());
+        batonService.registerChatBaton(authentication.getName(), mentorId, request, attachment);
+        return Response.success();
+    }
+
+    @PostMapping("/portfolio/{mentorId}")
+    public Response<Void> registerPortfolioBaton(
+            @PathVariable Long mentorId,
+            @RequestPart @Valid PortfolioBatonRegisterRequest request,
+            @RequestPart(required = false) MultipartFile attachment,
+            Authentication authentication
+    ) {
+        batonService.registerPortfolioBaton(authentication.getName(), mentorId, request, attachment);
+        return Response.success();
+    }
+
+    @PostMapping("/resume/{mentorId}")
+    public Response<Void> registerResumeBaton(
+            @PathVariable Long mentorId,
+            @RequestPart @Valid ResumeBatonRegisterRequest request,
+            @RequestPart(required = false) MultipartFile attachment,
+            Authentication authentication
+    ) {
+        batonService.registerResumeBaton(authentication.getName(), mentorId, request, attachment);
         return Response.success();
     }
 
