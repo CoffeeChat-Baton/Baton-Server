@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import sideproject.coffeechat.domain.baton.dto.BatonRegisterRequest;
+import sideproject.coffeechat.domain.baton.dto.ChatBatonRegisterRequest;
 import sideproject.coffeechat.domain.baton.service.BatonService;
 import sideproject.coffeechat.global.response.Response;
 
@@ -20,14 +20,14 @@ public class BatonController {
 
     private final BatonService batonService;
 
-    @PostMapping("/{mentorId}")
-    public Response<Void> registerBaton(
+    @PostMapping("/chat/{mentorId}")
+    public Response<Void> registerChatBaton(
             @PathVariable Long mentorId,
-            @RequestPart @Valid BatonRegisterRequest request,
+            @RequestPart @Valid ChatBatonRegisterRequest request,
             @RequestPart(required = false) MultipartFile attachment,
             Authentication authentication
     ) {
-        batonService.register(mentorId, request, attachment, authentication.getName());
+        batonService.registerChatBaton(mentorId, request, attachment, authentication.getName());
         return Response.success();
     }
 
