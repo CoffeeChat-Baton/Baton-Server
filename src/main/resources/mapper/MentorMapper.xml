@@ -59,4 +59,59 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
+    <select id="findMentorDetailsById"
+            resultMap="sideproject.coffeechat.domain.mentor.repository.MentorResultMap.MentorDTOMap">
+        SELECT m.id                         AS mentorId,
+               mem.profile_image_url        AS profileImageUrl,
+               mem.nickname                 AS nickname,
+               m.company_name               AS companyName,
+               mem.job_name                 AS jobName,
+               mem.sub_job_id               AS subJobName,
+               mem.career_years             AS careerYears,
+               m.short_description          AS shortDescription,
+               m.detailed_description       AS detailedDescription,
+
+               -- 멘토링 횟수
+               (SELECT COUNT(*)
+                FROM baton
+                WHERE mentor_id = #{mentorId}
+                  AND status = 'COMPLETED') AS mentoringCount,
+
+               -- 응답률 (소수점 1자리, 진행한 바통 개수 0 일 시 응답률 100)
+               COALESCE(
+                       ROUND(
+                               (SELECT COUNT(*)
+                                FROM baton
+                                WHERE mentor_id = #{mentor_id}
+                                  AND status IN ('COMPLETED', 'ACCEPTED', 'REJECTED')) * 100.0 /
+                               NULLIF((SELECT COUNT(*) FROM baton WHERE mentor_id = #{mentor_id}), 0),
+                               1
+                       ),
+                       100
+               )                            AS responseRate,
+
+               -- 북마크 여부
+               IF(EXISTS(SELECT 1
+                         FROM bookmark
+                         WHERE mentor_id = m.id
+                           AND member_id = #{memberId}), true, false
+               )                            AS isBookmarked,
+
+               ts.id                        AS timeSlotId,
+               ts.start_time                AS startTime,
+               ts.end_time                  AS endTime,
+               ts.priority                  AS priority,
+
+               tsd.day_of_week              AS dayOfWeek
+
+        FROM mentor m
+                 JOIN members mem ON m.worker_id = mem.id AND mem.member_type = 'WORKER'
+                 LEFT JOIN mentor_time_slot ts ON m.id = ts.mentor_id
+                 LEFT JOIN mentor_time_slot_days tsd ON ts.id = tsd.mentor_time_slot_id
+
+        WHERE m.id = #{mentorId}
+
+        ORDER BY ts.priority ASC
+    </select>
+
 </mapper>
