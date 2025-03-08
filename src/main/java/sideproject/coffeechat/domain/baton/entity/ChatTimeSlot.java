@@ -23,7 +23,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-public class BatonTimeSlot {
+public class ChatTimeSlot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class BatonTimeSlot {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "baton_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Baton baton;
+    private ChatBaton baton;
 
     @Column(nullable = false)
     private LocalDate date;
