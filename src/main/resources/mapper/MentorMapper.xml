@@ -5,58 +5,114 @@
 
 <mapper namespace="sideproject.coffeechat.domain.mentor.repository.MentorMapper">
 
-    <select id="findMentorsByJobId" resultType="sideproject.coffeechat.domain.mentor.dto.CompactMentorDTO">
-        SELECT
-            mem.nickname AS nickname,
-            mem.profile_image_url AS profileImageUrl,
-            m.company_name AS companyName,
-            mem.job_name AS jobName,
-            mem.sub_job_name AS subJobName,
-            mem.career_years AS careerYears,
-            m.id AS mentorId,
-            m.short_description AS shortDescription,
-            m.updated_at AS updatedAt,
+    <select id="findMentorsByJobId"
+            resultType="sideproject.coffeechat.domain.mentor.dto.mapperdto.CompactMentorDTO">
+        SELECT mem.nickname                                       AS nickname,
+               mem.profile_image_url                              AS profileImageUrl,
+               m.company_name                                     AS companyName,
+               mem.job_name                                       AS jobName,
+               mem.sub_job_name                                   AS subJobName,
+               mem.career_years                                   AS careerYears,
+               m.id                                               AS mentorId,
+               m.short_description                                AS shortDescription,
+               m.updated_at                                       AS updatedAt,
 
-            -- 멘토링 횟수
-            COUNT(CASE WHEN b.status = 'COMPLETED' THEN 1 END) AS mentoringCount,
+               -- 멘토링 횟수
+               COUNT(CASE WHEN b.status = 'COMPLETED' THEN 1 END) AS mentoringCount,
 
-            -- 응답률 (소수점 1자리, 진행한 바통 개수 0 일 시 응답률 100)
-            COALESCE(
-                ROUND(
-                    (COUNT(CASE WHEN b.status IN ('COMPLETED', 'ACCEPTED', 'REJECTED') THEN 1 END) * 100.0) /
-                    NULLIF(COUNT(b.id), 0),
-                    1
-                ),
-                100
-            ) AS responseRate,
+               -- 응답률 (소수점 1자리, 진행한 바통 개수 0 일 시 응답률 100)
+               COALESCE(
+                       ROUND(
+                               (COUNT(CASE
+                                          WHEN b.status IN ('COMPLETED', 'ACCEPTED', 'REJECTED')
+                                              THEN 1 END) * 100.0) /
+                               NULLIF(COUNT(b.id), 0),
+                               1
+                       ),
+                       100
+               )                                                  AS responseRate,
 
-            -- 북마크 여부
-            CASE
-                WHEN EXISTS(
-                    SELECT 1 FROM bookmark WHERE mentor_id = m.id AND member_id = #{memberId}
-                ) THEN true
-                ELSE false
-            END AS isBookmarked,
+               -- 북마크 여부
+               IF(EXISTS(SELECT 1
+                         FROM bookmark
+                         WHERE mentor_id = m.id
+                           AND member_id = #{memberId}), true, false
+               )                                                  AS isBookmarked,
 
-            -- 인기 점수 (멘토가 받은 전체 바통 개수 * 2 + 북마크 수)
-            (COUNT(b.id) * 2) + COUNT(bm2.id) AS popularityScore
+               -- 인기 점수 (멘토가 받은 전체 바통 개수 * 2 + 북마크 수)
+               (COUNT(b.id) * 2) + COUNT(bm2.id)                  AS popularityScore
 
         FROM Mentor m
-        JOIN Members mem ON m.worker_id = mem.id AND mem.member_type = 'WORKER'
-        LEFT JOIN Baton b ON m.id = b.mentor_id
-        LEFT JOIN bookmark bm2 ON m.id = bm2.mentor_id
+                 JOIN Members mem ON m.worker_id = mem.id AND mem.member_type = 'WORKER'
+                 LEFT JOIN Baton b ON m.id = b.mentor_id
+                 LEFT JOIN bookmark bm2 ON m.id = bm2.mentor_id
 
-        WHERE mem.job_id = #{jobId} AND mem.sub_job_id = #{subJobId}
+        WHERE mem.job_id = #{jobId}
+          AND mem.sub_job_id = #{subJobId}
 
         GROUP BY m.id, mem.id, m.updated_at
 
-        ORDER BY
-        CASE
-            WHEN #{sortBy} = 'latest' THEN m.updated_at
-            WHEN #{sortBy} = 'popular' THEN popularityScore
-        END DESC
+        ORDER BY CASE
+                     WHEN #{sortBy} = 'latest' THEN m.updated_at
+                     WHEN #{sortBy} = 'popular' THEN popularityScore
+                     END DESC
 
         LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="findMentorDetailsById"
+            resultMap="sideproject.coffeechat.domain.mentor.repository.MentorResultMap.MentorDTOMap">
+        SELECT m.id                         AS mentorId,
+               mem.profile_image_url        AS profileImageUrl,
+               mem.nickname                 AS nickname,
+               m.company_name               AS companyName,
+               mem.job_name                 AS jobName,
+               mem.sub_job_id               AS subJobName,
+               mem.career_years             AS careerYears,
+               m.short_description          AS shortDescription,
+               m.detailed_description       AS detailedDescription,
+
+               -- 멘토링 횟수
+               (SELECT COUNT(*)
+                FROM baton
+                WHERE mentor_id = #{mentorId}
+                  AND status = 'COMPLETED') AS mentoringCount,
+
+               -- 응답률 (소수점 1자리, 진행한 바통 개수 0 일 시 응답률 100)
+               COALESCE(
+                       ROUND(
+                               (SELECT COUNT(*)
+                                FROM baton
+                                WHERE mentor_id = #{mentor_id}
+                                  AND status IN ('COMPLETED', 'ACCEPTED', 'REJECTED')) * 100.0 /
+                               NULLIF((SELECT COUNT(*) FROM baton WHERE mentor_id = #{mentor_id}), 0),
+                               1
+                       ),
+                       100
+               )                            AS responseRate,
+
+               -- 북마크 여부
+               IF(EXISTS(SELECT 1
+                         FROM bookmark
+                         WHERE mentor_id = m.id
+                           AND member_id = #{memberId}), true, false
+               )                            AS isBookmarked,
+
+               ts.id                        AS timeSlotId,
+               ts.start_time                AS startTime,
+               ts.end_time                  AS endTime,
+               ts.priority                  AS priority,
+
+               tsd.day_of_week              AS dayOfWeek
+
+        FROM mentor m
+                 JOIN members mem ON m.worker_id = mem.id AND mem.member_type = 'WORKER'
+                 LEFT JOIN mentor_time_slot ts ON m.id = ts.mentor_id
+                 LEFT JOIN mentor_time_slot_days tsd ON ts.id = tsd.mentor_time_slot_id
+
+        WHERE m.id = #{mentorId}
+
+        ORDER BY ts.priority ASC
     </select>
 
 </mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sideproject.coffeechat.domain.mentor.repository.MentorResultMap">
+
+    <resultMap id="MentorDTOMap"
+               type="sideproject.coffeechat.domain.mentor.dto.mapperdto.MentorDTO">
+
+        <id property="mentorId" column="mentorId"/>
+        <result property="profileImageUrl" column="profileImageUrl"/>
+        <result property="nickname" column="nickname"/>
+        <result property="companyName" column="companyName"/>
+        <result property="jobName" column="jobName"/>
+        <result property="subJobName" column="subJobName"/>
+        <result property="careerYears" column="careerYears"/>
+        <result property="shortDescription" column="shortDescription"/>
+        <result property="detailedDescription" column="detailedDescription"/>
+        <result property="mentoringCount" column="mentoringCount"/>
+        <result property="responseRate" column="responseRate"/>
+        <result property="isBookmarked" column="isBookmarked"/>
+
+        <collection property="availableSchedules"
+                    ofType="sideproject.coffeechat.domain.mentor.dto.mapperdto.MentorDTO$MentorTimeSlotDTO"
+                    resultMap="MentorTimeSlotDTOMap"/>
+    </resultMap>
+
+    <resultMap id="MentorTimeSlotDTOMap"
+               type="sideproject.coffeechat.domain.mentor.dto.mapperdto.MentorDTO$MentorTimeSlotDTO">
+
+        <id property="timeSlotId" column="timeSlotId"/>
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+        <result property="priority" column="priority"/>
+
+        <collection property="availableDays" ofType="java.lang.String">
+            <result column="dayOfWeek"/>
+        </collection>
+    </resultMap>
+
+</mapper>

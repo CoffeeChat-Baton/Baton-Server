@@ -1,17 +1,13 @@
-package sideproject.coffeechat.domain.mentor.dto.response;
+package sideproject.coffeechat.domain.mentor.dto.mapperdto;
 
 import java.time.LocalTime;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class MentorResponse {
+public class MentorDTO {
 
     private Long mentorId;
 
@@ -27,33 +23,31 @@ public class MentorResponse {
 
     private int careerYears;
 
-    private Long mentoringCount;
-
-    private Double responseRate;  // 소수점 1자리까지
-
     private String shortDescription;
 
     private String detailedDescription;
 
-    private List<MentorTimeSlotResponse> availableSchedules;
+    private Long mentoringCount;
+
+    private Double responseRate;  // 소수점 1자리까지
 
     private boolean isBookmarked;
 
+    private List<MentorTimeSlotDTO> availableSchedules;
+
     @Getter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @Builder
-    public static class MentorTimeSlotResponse {
+    public static class MentorTimeSlotDTO {
 
         private Long timeSlotId;
-
-        private List<String> availableDays;
 
         private LocalTime startTime;
 
         private LocalTime endTime;
 
         private int priority;
+
+        private List<String> availableDays;
 
     }
 
