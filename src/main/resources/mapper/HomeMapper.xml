@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sideproject.coffeechat.domain.home.repository.HomeMapper">
+
+    <select id="findAllJobsWithMinSubJob" resultType="sideproject.coffeechat.domain.home.dto.JobWithMinSubJobDTO">
+        SELECT j.id            AS jobId,
+               j.job_name      AS jobName,
+               sj.id           AS minSubJobId,
+               sj.sub_job_name AS minSubJobName
+        FROM job j
+                 LEFT JOIN sub_job sj ON sj.id = (SELECT MIN(sj2.id)
+                                                  FROM sub_job sj2
+                                                  WHERE sj2.job_id = j.id)
+        ORDER BY j.id ASC;
+    </select>
+
+</mapper>
