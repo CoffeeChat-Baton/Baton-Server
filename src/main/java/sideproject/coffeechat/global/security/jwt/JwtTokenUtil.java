@@ -11,12 +11,14 @@ import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import sideproject.coffeechat.global.security.MemberDetailsService;
@@ -62,15 +64,24 @@ public class JwtTokenUtil {
     }
 
     private String generateAccessToken(Authentication authentication, int duration) {
+        List<String> roles = getRoles(authentication);
         LocalDateTime now = LocalDateTime.now();
         Date expirationDate = Date.from(now.plusDays(duration)
                 .atZone(ZoneId.systemDefault()).toInstant());
 
         return Jwts.builder()
                 .subject(authentication.getName())
+                .claim("roles", roles)
                 .expiration(expirationDate)
                 .signWith(key)
                 .compact();
+    }
+
+    private static List<String> getRoles(Authentication authentication) {
+        return authentication.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
     }
 
     private String generateRefreshToken() {
