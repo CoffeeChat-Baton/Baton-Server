@@ -7,6 +7,7 @@
 
     <select id="getRequestedBatons" resultType="sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedBatonDTO">
         SELECT
+            b.id AS batonId,
             b.baton_type AS batonType,
             b.charge AS chatBatonDuration,
             mem.profile_image_url AS profileImageUrl,
@@ -34,6 +35,7 @@
 
     <select id="getPendingBatons" resultType="sideproject.coffeechat.domain.baton.dto.mapperdto.PendingBatonDTO">
         SELECT
+            b.id AS batonId,
             b.baton_type AS batonType,
             b.charge AS chatBatonDuration,
             m.member_type AS memberType,

@@ -12,6 +12,8 @@ import sideproject.coffeechat.domain.baton.entity.BatonType;
 @Builder
 public class CompactBatonResponse {
 
+    private Long batonId;
+
     private BatonType batonType;
 
     // BatonType == CHAT 인 경우만 필요

@@ -6,6 +6,8 @@ import sideproject.coffeechat.domain.baton.entity.BatonType;
 @Getter
 public class RequestedBatonDTO {
 
+    private Long batonId;
+
     private BatonType batonType;
 
     private String chatBatonDuration;

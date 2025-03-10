@@ -8,6 +8,8 @@ import sideproject.coffeechat.domain.member.entity.MemberType;
 @Getter
 public class PendingBatonDTO {
 
+    private Long batonId;
+
     private BatonType batonType;
 
     private String chatBatonDuration;

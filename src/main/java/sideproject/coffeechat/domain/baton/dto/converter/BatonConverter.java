@@ -78,6 +78,7 @@ public class BatonConverter {
         return dtos.stream()
                 .map(dto -> {
                     return CompactBatonResponse.builder()
+                            .batonId(dto.getBatonId())
                             .batonType(dto.getBatonType())
                             .chatBatonDuration(dto.getChatBatonDuration())
                             .profileImageUrl(dto.getProfileImageUrl())
@@ -95,6 +96,7 @@ public class BatonConverter {
                 .map(dto -> {
                     long dueInDays = calculateDueInDays(dto.getCreatedAt());
                     return CompactBatonResponse.builder()
+                            .batonId(dto.getBatonId())
                             .batonType(dto.getBatonType())
                             .chatBatonDuration(dto.getChatBatonDuration())
                             .profileImageUrl(dto.getProfileImageUrl())
