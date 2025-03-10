@@ -17,7 +17,7 @@ public class Worker extends Member {
 
     private String subJobName;
 
-    private int careerYears;
+    private Integer careerYears;
 
     public void updateJob(Long jobId, String jobName) {
         this.jobId = jobId;

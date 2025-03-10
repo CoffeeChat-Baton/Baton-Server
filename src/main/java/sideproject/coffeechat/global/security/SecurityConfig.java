@@ -3,6 +3,7 @@ package sideproject.coffeechat.global.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,6 +13,7 @@ import sideproject.coffeechat.global.response.CustomAccessDeniedHandler;
 import sideproject.coffeechat.global.response.CustomAuthenticationEntryPoint;
 import sideproject.coffeechat.global.security.jwt.JwtTokenFilter;
 
+@EnableMethodSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
