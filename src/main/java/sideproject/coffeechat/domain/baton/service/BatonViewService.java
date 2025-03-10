@@ -29,4 +29,12 @@ public class BatonViewService {
         return BatonConverter.toRequestedBatonsResponse(requestedBatonDTOs);
     }
 
+    public List<CompactBatonResponse> getPendingBatons(String username, int page, int size, BatonType batonType) {
+        Member member = memberService.getMemberByUsername(username);
+        int offset = (page - 1) * size;
+        List<PendingBatonDTO> pendingBatonDTOs = batonMapper.getPendingBatons(
+                member.getId(), batonType, size, offset);
+        return BatonConverter.toPendingBatonsResponse(pendingBatonDTOs);
+    }
+
 }

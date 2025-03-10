@@ -11,4 +11,6 @@ public interface BatonMapper {
 
     List<RequestedBatonDTO> getRequestedBatons(Long menteeId, BatonType batonType, int size, int offset);
 
+    List<PendingBatonDTO> getPendingBatons(Long mentorId, BatonType batonType, int size, int offset);
+
 }

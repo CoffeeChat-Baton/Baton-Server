@@ -90,4 +90,29 @@ public class BatonConverter {
                 }).toList();
     }
 
+    public static List<CompactBatonResponse> toPendingBatonsResponse(List<PendingBatonDTO> dtos) {
+        return dtos.stream()
+                .map(dto -> {
+                    long dueInDays = calculateDueInDays(dto.getCreatedAt());
+                    return CompactBatonResponse.builder()
+                            .batonType(dto.getBatonType())
+                            .chatBatonDuration(dto.getChatBatonDuration())
+                            .profileImageUrl(dto.getProfileImageUrl())
+                            .nickname(dto.getNickname())
+                            // 학생 → 학력 | 직장인 → 직무
+                            .section(dto.getEducationName() != null ? dto.getEducationName() : dto.getJobName())
+                            // 학생 → 전공 | 직장인 → 세부 직무
+                            .division(dto.getMajorName() != null ? dto.getMajorName() : dto.getSubJobName())
+                            .careerYears(dto.getCareerYears())
+                            .dueInDays(dueInDays)
+                            .build();
+                }).toList();
+    }
+
+    private static long calculateDueInDays(LocalDateTime createdAt) {
+        LocalDateTime dueDate = createdAt.plusHours(Constants.PENDING_BATON_EXPIRATION_HOURS);
+        long daysLeft = ChronoUnit.DAYS.between(LocalDateTime.now(), dueDate);
+        return Math.max(daysLeft, 0);
+    }
+
 }
