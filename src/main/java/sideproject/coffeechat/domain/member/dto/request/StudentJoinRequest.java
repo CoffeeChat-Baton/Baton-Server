@@ -9,25 +9,25 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WorkerJoinRequest {
+public class StudentJoinRequest {
 
     @NotNull
     private String nickname;
 
     @NotNull
-    private Long jobId;
+    private Long educationId;
 
-    // Job 이 "기타"인 경우만 필요
-    private String customJobName;
-
-    @NotNull
-    private Long subJobId;
-
-    // SubJob 이 "기타"인 경우만 필요
-    private String customSubJobName;
+    // Education 이 "기타"인 경우만 필요
+    private String customEducationName;
 
     @NotNull
-    private Integer careerYears;
+    private Long majorId;
+
+    // Major 이 "기타"인 경우만 필요
+    private String customMajorName;
+
+    @NotNull
+    private Boolean isEnrolled;
 
     @Email
     private String email;

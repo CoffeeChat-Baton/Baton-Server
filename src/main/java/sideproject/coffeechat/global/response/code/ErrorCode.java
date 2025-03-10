@@ -15,7 +15,9 @@ public enum ErrorCode {
     SOCIAL_TYPE_ERROR(HttpStatus.BAD_REQUEST, "Social type request error."),
     JOB_NOT_FOUND(HttpStatus.BAD_REQUEST, "Job not found."),
     SUB_JOB_NOT_FOUND(HttpStatus.BAD_REQUEST, "SubJob not found."),
-    JOB_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "Job error."),
+    WORKER_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "Bad Worker Request"),
+    EDUCATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "Education not found."),
+    STUDENT_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "Bad Student Request"),
 
     // MentorException
     MENTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "Mentor not found."),

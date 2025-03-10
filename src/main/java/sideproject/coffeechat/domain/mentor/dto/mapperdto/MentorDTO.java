@@ -3,10 +3,8 @@ package sideproject.coffeechat.domain.mentor.dto.mapperdto;
 import java.time.LocalTime;
 import java.util.List;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class MentorDTO {
 
     private Long mentorId;
@@ -36,7 +34,6 @@ public class MentorDTO {
     private List<MentorTimeSlotDTO> availableSchedules;
 
     @Getter
-    @NoArgsConstructor
     public static class MentorTimeSlotDTO {
 
         private Long timeSlotId;
