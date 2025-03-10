@@ -28,7 +28,7 @@
             AND b.baton_type = #{batonType}
         </if>
 
-        ORDER BY b.id ASC
+        ORDER BY b.id DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
 
@@ -57,7 +57,7 @@
             AND b.baton_type = #{batonType}
         </if>
 
-        ORDER BY b.id ASC
+        ORDER BY b.id DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
 
