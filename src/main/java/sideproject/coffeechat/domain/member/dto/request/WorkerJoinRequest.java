@@ -5,17 +5,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import sideproject.coffeechat.domain.member.entity.MemberType;
-import sideproject.coffeechat.global.validator.WorkerOnly;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkerJoinRequest {
-
-    @NotNull
-    @WorkerOnly
-    private MemberType memberType;
 
     @NotNull
     private String nickname;
