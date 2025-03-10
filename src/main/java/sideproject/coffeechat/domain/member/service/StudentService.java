@@ -4,13 +4,19 @@ import static sideproject.coffeechat.global.response.code.ErrorCode.EDUCATION_NO
 import static sideproject.coffeechat.global.response.code.ErrorCode.STUDENT_REQUEST_ERROR;
 import static sideproject.coffeechat.global.response.code.ErrorCode.SUB_JOB_NOT_FOUND;
 
-import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import sideproject.coffeechat.domain.member.dto.converter.EducationConverter;
 import sideproject.coffeechat.domain.member.dto.request.StudentJoinRequest;
+import sideproject.coffeechat.domain.member.dto.response.EducationResponse;
+import sideproject.coffeechat.domain.member.dto.response.MajorResponse;
 import sideproject.coffeechat.domain.member.entity.Education;
 import sideproject.coffeechat.domain.member.entity.Major;
 import sideproject.coffeechat.domain.member.entity.Member;
@@ -83,6 +89,18 @@ public class StudentService {
                 "educationName", isEducationEtc ? customEducationName : education.getEducationName(),
                 "majorName", isMajorEtc ? customMajorName : major.getMajorName()
         );
+    }
+
+    @Transactional(readOnly = true)
+    public List<EducationResponse> getEducations() {
+        List<Education> educations = educationRepository.findAll(Sort.by(Direction.ASC, "id"));
+        return EducationConverter.toEducationResponseList(educations);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MajorResponse> getMajorsByEducationId(Long educationId) {
+        List<Major> majors = majorRepository.findByEducationIdOrderByIdAsc(educationId);
+        return EducationConverter.toMajorResponseList(majors);
     }
 
 }
