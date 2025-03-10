@@ -30,4 +30,31 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
+    <select id="getPendingBatons" resultType="sideproject.coffeechat.domain.baton.dto.mapperdto.PendingBatonDTO">
+        SELECT
+            b.baton_type AS batonType,
+            b.charge AS chatBatonDuration,
+            m.member_type AS memberType,
+            m.profile_image_url AS profileImageUrl,
+            m.nickname AS nickname,
+            m.education_name AS educationName,
+            m.major_name AS majorName,
+            m.job_name AS jobName,
+            m.sub_job_name AS subJobName,
+            m.career_years AS careerYears,
+            m.created_at AS createdAt
+
+        FROM baton b
+        LEFT JOIN members m ON b.mentee_id = m.id
+
+        WHERE b.mentor_id = #{mentorId}
+        AND b.status = 'REQUESTED'
+        <if test="batonType != null">
+            AND b.baton_type = #{batonType}
+        </if>
+
+        ORDER BY b.id ASC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
 </mapper>
