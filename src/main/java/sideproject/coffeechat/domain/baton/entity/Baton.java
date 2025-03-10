@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import sideproject.coffeechat.domain.member.entity.Member;
 import sideproject.coffeechat.domain.mentor.entity.Mentor;
+import sideproject.coffeechat.global.BaseEntity;
 
 @Entity
 @Getter
@@ -29,7 +30,7 @@ import sideproject.coffeechat.domain.mentor.entity.Mentor;
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "baton_type")
-public abstract class Baton {
+public abstract class Baton extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +51,7 @@ public abstract class Baton {
     private Mentor mentor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "mentee_id")
     private Member mentee;
 
 }
