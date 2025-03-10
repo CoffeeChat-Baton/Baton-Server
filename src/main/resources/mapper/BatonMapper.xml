@@ -20,7 +20,9 @@
         LEFT JOIN mentor m ON b.mentor_id = m.id
         LEFT JOIN members mem ON m.id = mem.id
 
-        WHERE b.mentee_id = #{menteeId}
+        WHERE b.mentee_id = (
+            SELECT id FROM members WHERE username = #{menteeUsername}
+        )
         AND b.status = 'REQUESTED'
         <if test="batonType != null">
             AND b.baton_type = #{batonType}
@@ -47,7 +49,9 @@
         FROM baton b
         LEFT JOIN members m ON b.mentee_id = m.id
 
-        WHERE b.mentor_id = #{mentorId}
+        WHERE b.mentor_id = (
+            SELECT id FROM members WHERE username = #{mentorUsername}
+        )
         AND b.status = 'REQUESTED'
         <if test="batonType != null">
             AND b.baton_type = #{batonType}
