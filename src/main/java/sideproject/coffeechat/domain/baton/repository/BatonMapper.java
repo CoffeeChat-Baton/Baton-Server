@@ -1,11 +1,14 @@
 package sideproject.coffeechat.domain.baton.repository;
 
-import java.util.Map;
+import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import sideproject.coffeechat.domain.baton.dto.mapperdto.PendingBatonDTO;
+import sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedBatonDTO;
+import sideproject.coffeechat.domain.baton.entity.BatonType;
 
 @Mapper
 public interface BatonMapper {
 
-    Map<String, Long> getBatonStatusCounts(Long mentorId);
+    List<RequestedBatonDTO> getRequestedBatons(Long menteeId, BatonType batonType, int size, int offset);
 
 }
