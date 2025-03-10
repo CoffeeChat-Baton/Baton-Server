@@ -31,5 +31,18 @@ public class BatonViewController {
                 batonViewService.getRequestedBatons(authentication.getName(), page, size, batonType)
         );
     }
+
+    @GetMapping("/pending-approval")
+    @PreAuthorize("hasRole('MENTOR')")
+    public Response<List<CompactBatonResponse>> getPendingBatons(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "15") int size,
+            @RequestParam(required = false) BatonType batonType,
+            Authentication authentication
+    ) {
+        return Response.success(
+                batonViewService.getPendingBatons(authentication.getName(), page, size, batonType)
+        );
+    }
     
 }
