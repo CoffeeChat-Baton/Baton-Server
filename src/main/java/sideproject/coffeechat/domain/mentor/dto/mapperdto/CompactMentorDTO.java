@@ -2,10 +2,8 @@ package sideproject.coffeechat.domain.mentor.dto.mapperdto;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class CompactMentorDTO {
 
     // Member
