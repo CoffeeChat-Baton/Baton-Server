@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sideproject.coffeechat.domain.baton.entity.BatonType;
 
 @Getter
 @AllArgsConstructor
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CompactBatonResponse {
 
-    private String batonType;
+    private BatonType batonType;
 
     // BatonType == CHAT 인 경우만 필요
     private String chatBatonDuration;

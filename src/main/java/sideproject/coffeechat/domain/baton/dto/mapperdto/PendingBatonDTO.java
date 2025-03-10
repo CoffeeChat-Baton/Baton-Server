@@ -2,15 +2,17 @@ package sideproject.coffeechat.domain.baton.dto.mapperdto;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
+import sideproject.coffeechat.domain.baton.entity.BatonType;
+import sideproject.coffeechat.domain.member.entity.MemberType;
 
 @Getter
 public class PendingBatonDTO {
 
-    private String batonType;
+    private BatonType batonType;
 
     private String chatBatonDuration;
 
-    private String memberType;
+    private MemberType memberType;
 
     private String profileImageUrl;
 
