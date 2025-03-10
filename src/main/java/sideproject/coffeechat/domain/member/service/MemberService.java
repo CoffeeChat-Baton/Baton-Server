@@ -8,6 +8,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import sideproject.coffeechat.domain.member.dto.request.LoginRequest;
 import sideproject.coffeechat.domain.member.dto.response.LoginResponse;
 import sideproject.coffeechat.domain.member.entity.GeneralMember;
@@ -15,6 +16,7 @@ import sideproject.coffeechat.domain.member.entity.Member;
 import sideproject.coffeechat.domain.member.entity.Role;
 import sideproject.coffeechat.domain.member.entity.SocialType;
 import sideproject.coffeechat.domain.member.repository.MemberRepository;
+import sideproject.coffeechat.global.aws.S3Uploader;
 import sideproject.coffeechat.global.response.code.ErrorCode;
 import sideproject.coffeechat.global.response.exception.MemberException;
 import sideproject.coffeechat.global.security.jwt.JwtTokenUtil;
@@ -28,6 +30,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final SocialServiceManager socialServiceManager;
     private final JwtTokenUtil jwtTokenUtil;
+    private final S3Uploader s3Uploader;
 
     public LoginResponse socialLogin(LoginRequest request) {
         SocialType socialType = request.getSocialType();
@@ -90,6 +93,12 @@ public class MemberService {
     public Member getMemberByUsername(String username) {
         return memberRepository.findByUsername(username)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
+
+    public void uploadProfileImage(Member member, MultipartFile profileImage) {
+        String prefix = member.getId() + "/profile/";
+        String profileImageUrl = s3Uploader.upload(prefix, profileImage);
+        member.updateProfileImageUrl(profileImageUrl);
     }
 
 }

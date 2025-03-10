@@ -1,9 +1,9 @@
 package sideproject.coffeechat.domain.member.service;
 
 import static sideproject.coffeechat.global.response.code.ErrorCode.JOB_NOT_FOUND;
-import static sideproject.coffeechat.global.response.code.ErrorCode.JOB_REQUEST_ERROR;
 import static sideproject.coffeechat.global.response.code.ErrorCode.SUB_JOB_NOT_FOUND;
 import static sideproject.coffeechat.global.response.code.ErrorCode.WORKER_NOT_FOUND;
+import static sideproject.coffeechat.global.response.code.ErrorCode.WORKER_REQUEST_ERROR;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,6 @@ import sideproject.coffeechat.domain.member.repository.JobRepository;
 import sideproject.coffeechat.domain.member.repository.SubJobRepository;
 import sideproject.coffeechat.domain.member.repository.WorkerMapper;
 import sideproject.coffeechat.domain.member.repository.WorkerRepository;
-import sideproject.coffeechat.global.aws.S3Uploader;
 import sideproject.coffeechat.global.response.code.ErrorCode;
 import sideproject.coffeechat.global.response.exception.MemberException;
 
@@ -41,12 +40,11 @@ public class WorkerService {
     private final WorkerMapper workerMapper;
     private final JobRepository jobRepository;
     private final SubJobRepository subJobRepository;
-    private final S3Uploader s3Uploader;
 
     public void join(WorkerJoinRequest request, MultipartFile profileImage, String username) {
         Member member = memberService.getMemberByUsername(username);
         saveWorker(request, member);
-        uploadProfileImage(member, profileImage);
+        memberService.uploadProfileImage(member, profileImage);
     }
 
     private void saveWorker(WorkerJoinRequest request, Member member) {
@@ -62,12 +60,6 @@ public class WorkerService {
                 request.getCareerYears(),
                 request.getEmail()
         );
-    }
-
-    private void uploadProfileImage(Member member, MultipartFile profileImage) {
-        String prefix = member.getId() + "/profile/";
-        String profileImageUrl = s3Uploader.upload(prefix, profileImage);
-        member.updateProfileImageUrl(profileImageUrl);
     }
 
     @Transactional(readOnly = true)
@@ -90,7 +82,7 @@ public class WorkerService {
                 .orElseThrow(() -> new MemberException(SUB_JOB_NOT_FOUND));
 
         if (!subJob.getJob().getId().equals(jobId)) {
-            throw new MemberException(JOB_REQUEST_ERROR, "This SubJob does not belong to this Job");
+            throw new MemberException(WORKER_REQUEST_ERROR, "This SubJob does not belong to this Job");
         }
 
         return validateCustomJobNames(job, customJobName, subJob, customSubJobName);
@@ -101,11 +93,11 @@ public class WorkerService {
         boolean isJobEtc = job.getJobName().equals(ETC);
         boolean isSubJobEtc = subJob.getSubJobName().equals(ETC);
 
-        if (isJobEtc && customJobName == null) {
-            throw new MemberException(JOB_REQUEST_ERROR, "CustomJobName is required");
+        if (isJobEtc && (customJobName == null)) {
+            throw new MemberException(WORKER_REQUEST_ERROR, "CustomJobName is required");
         }
-        if (isSubJobEtc && customSubJobName == null) {
-            throw new MemberException(JOB_REQUEST_ERROR, "CustomSubJobName is required");
+        if (isSubJobEtc && (customSubJobName == null)) {
+            throw new MemberException(WORKER_REQUEST_ERROR, "CustomSubJobName is required");
         }
 
         return Map.of(
