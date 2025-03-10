@@ -1,5 +1,6 @@
 package sideproject.coffeechat.domain.baton.dto.request;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class ResumeBatonRegisterRequest {
 
     @NotNull
+    @Future
     private LocalDate deadline;
 
     @NotNull

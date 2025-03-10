@@ -1,6 +1,7 @@
 package sideproject.coffeechat.domain.baton.dto.request;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
@@ -39,6 +40,7 @@ public class ChatBatonRegisterRequest {
     public static class TimeSlotRequest implements HasPriority, TimeRangeProvider {
 
         @NotNull
+        @Future
         private LocalDate date;
 
         @NotNull
