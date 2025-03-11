@@ -17,6 +17,19 @@
         <result property="shortDescription" column="shortDescription"/>
     </resultMap>
 
+    <resultMap id="BatonMenteeDTOMap"
+               type="sideproject.coffeechat.domain.baton.dto.mapperdto.BatonMenteeDTO">
+
+        <result property="memberType" column="memberType"/>
+        <result property="profileImageUrl" column="profileImageUrl"/>
+        <result property="nickname" column="nickname"/>
+        <result property="educationName" column="educationName"/>
+        <result property="majorName" column="majorName"/>
+        <result property="jobName" column="jobName"/>
+        <result property="subJobName" column="subJobName"/>
+        <result property="careerYears" column="careerYears"/>
+    </resultMap>
+
     <resultMap id="ChatTimeSlotDTOMap"
                type="sideproject.coffeechat.domain.baton.dto.mapperdto.ChatTimeSlotDTO">
 
@@ -39,6 +52,25 @@
         <association property="mentor"
                      javaType="sideproject.coffeechat.domain.baton.dto.mapperdto.BatonMentorDTO"
                      resultMap="BatonMentorDTOMap"/>
+        <collection property="availableSchedules"
+                    javaType="ArrayList"
+                    ofType="sideproject.coffeechat.domain.baton.dto.mapperdto.ChatTimeSlotDTO"
+                    resultMap="ChatTimeSlotDTOMap"/>
+    </resultMap>
+
+    <resultMap id="PendingBatonDTOMap"
+               type="sideproject.coffeechat.domain.baton.dto.mapperdto.PendingChatBatonDTO">
+
+        <id property="batonId" column="batonId"/>
+        <result property="batonType" column="batonType"/>
+        <result property="charge" column="charge"/>
+        <result property="preQuestion" column="preQuestion"/>
+        <result property="attachmentUrl" column="attachmentUrl"/>
+        <result property="createdAt" column="createdAt"/>
+
+        <association property="mentee"
+                     javaType="sideproject.coffeechat.domain.baton.dto.mapperdto.BatonMenteeDTO"
+                     resultMap="BatonMenteeDTOMap"/>
         <collection property="availableSchedules"
                     javaType="ArrayList"
                     ofType="sideproject.coffeechat.domain.baton.dto.mapperdto.ChatTimeSlotDTO"

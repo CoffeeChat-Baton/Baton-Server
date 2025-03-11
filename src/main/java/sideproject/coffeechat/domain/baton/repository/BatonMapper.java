@@ -17,4 +17,6 @@ public interface BatonMapper {
 
     RequestedChatBatonDTO getRequestedChatBaton(Long batonId);
 
+    PendingChatBatonDTO getPendingChatBaton(Long batonId);
+
 }
