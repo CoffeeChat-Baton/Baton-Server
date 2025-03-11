@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sideproject.coffeechat.domain.baton.entity.BatonType;
+import sideproject.coffeechat.domain.member.entity.MemberType;
 
 @Getter
 @AllArgsConstructor
@@ -19,6 +20,8 @@ public class CompactBatonResponse {
     // BatonType == CHAT 인 경우만 필요
     private String chatBatonDuration;
 
+    private MemberType memberType;
+
     private String profileImageUrl;
 
     private String nickname;
@@ -27,14 +30,14 @@ public class CompactBatonResponse {
     private String companyName;
 
     // 학생 → 학력 | 직장인 → 직무
-    private String section;
+    private String division;
 
     // 학생 → 전공 | 직장인 → 세부 직무
-    private String division;
+    private String section;
 
     // 직장인 & 멘토 경우만 필요
     private Integer careerYears;
 
-    private long dueInDays;
+    private Long dueInDays;
 
 }
