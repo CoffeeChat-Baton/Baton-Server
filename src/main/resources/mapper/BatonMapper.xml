@@ -63,4 +63,37 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
+    <select id="getRequestedChatBaton"
+            resultMap="sideproject.coffeechat.domain.baton.repository.BatonResultMap.RequestedChatBatonDTOMap">
+        SELECT
+            b.id AS batonId,
+            b.baton_type AS batonType,
+            b.charge AS charge,
+            b.pre_question AS preQuestion,
+            b.attachment_url AS attachmentUrl,
+
+            mem.profile_image_url AS profileImageUrl,
+            mem.nickname AS nickname,
+            m.company_name AS companyName,
+            mem.job_name AS jobName,
+            mem.sub_job_name AS subJobName,
+            mem.career_years AS careerYears,
+            m.short_description AS shortDescription,
+
+            t.id AS timeSlotId,
+            t.date AS date,
+            t.start_time AS startTime,
+            t.end_time AS endTime,
+            t.priority AS priority
+
+        FROM baton b
+        JOIN mentor m ON b.mentor_id = m.id
+        JOIN members mem ON m.worker_id = mem.id
+        LEFT JOIN chat_time_slot t ON b.id = t.baton_id
+
+        WHERE b.id = #{batonId} AND b.baton_type = 'CHAT' AND b.status = 'REQUESTED'
+
+        ORDER BY t.priority ASC
+    </select>
+
 </mapper>
