@@ -54,4 +54,12 @@ public class BatonViewController {
         );
     }
 
+    @GetMapping("/pending-approval/chat/{batonId}")
+    @PreAuthorize("hasRole('MENTOR')")
+    public Response<ChatBatonResponse> getPendingChatBaton(@PathVariable Long batonId) {
+        return Response.success(
+                batonViewService.getPendingChatBaton(batonId)
+        );
+    }
+
 }
