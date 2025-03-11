@@ -1,22 +1,33 @@
 package sideproject.coffeechat.domain.baton.dto.converter;
 
 import static sideproject.coffeechat.domain.baton.entity.BatonStatus.REQUESTED;
+import static sideproject.coffeechat.domain.member.entity.MemberType.*;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import sideproject.coffeechat.domain.baton.dto.mapperdto.BatonMenteeDTO;
+import sideproject.coffeechat.domain.baton.dto.mapperdto.BatonMentorDTO;
+import sideproject.coffeechat.domain.baton.dto.mapperdto.ChatTimeSlotDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.PendingBatonDTO;
+import sideproject.coffeechat.domain.baton.dto.mapperdto.PendingChatBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedBatonDTO;
+import sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedChatBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.request.ChatBatonRegisterRequest;
 import sideproject.coffeechat.domain.baton.dto.request.ChatBatonRegisterRequest.TimeSlotRequest;
 import sideproject.coffeechat.domain.baton.dto.request.PortfolioBatonRegisterRequest;
 import sideproject.coffeechat.domain.baton.dto.request.ResumeBatonRegisterRequest;
+import sideproject.coffeechat.domain.baton.dto.response.BatonMenteeResponse;
+import sideproject.coffeechat.domain.baton.dto.response.BatonMentorResponse;
+import sideproject.coffeechat.domain.baton.dto.response.ChatBatonResponse;
+import sideproject.coffeechat.domain.baton.dto.response.ChatTimeSlotResponse;
 import sideproject.coffeechat.domain.baton.dto.response.CompactBatonResponse;
 import sideproject.coffeechat.domain.baton.entity.ChatBaton;
 import sideproject.coffeechat.domain.baton.entity.ChatTimeSlot;
 import sideproject.coffeechat.domain.baton.entity.PortfolioBaton;
 import sideproject.coffeechat.domain.baton.entity.ResumeBaton;
 import sideproject.coffeechat.domain.member.entity.Member;
+import sideproject.coffeechat.domain.member.entity.MemberType;
 import sideproject.coffeechat.domain.mentor.entity.Mentor;
 import sideproject.coffeechat.global.Constants;
 
@@ -72,47 +83,6 @@ public class BatonConverter {
                 .mentor(mentor)
                 .mentee(mentee)
                 .build();
-    }
-
-    public static List<CompactBatonResponse> toRequestedBatonsResponse(List<RequestedBatonDTO> dtos) {
-        return dtos.stream()
-                .map(dto -> {
-                    return CompactBatonResponse.builder()
-                            .batonType(dto.getBatonType())
-                            .chatBatonDuration(dto.getChatBatonDuration())
-                            .profileImageUrl(dto.getProfileImageUrl())
-                            .nickname(dto.getNickname())
-                            .companyName(dto.getCompanyName())
-                            .section(dto.getJobName())
-                            .division(dto.getSubJobName())
-                            .careerYears(dto.getCareerYears())
-                            .build();
-                }).toList();
-    }
-
-    public static List<CompactBatonResponse> toPendingBatonsResponse(List<PendingBatonDTO> dtos) {
-        return dtos.stream()
-                .map(dto -> {
-                    long dueInDays = calculateDueInDays(dto.getCreatedAt());
-                    return CompactBatonResponse.builder()
-                            .batonType(dto.getBatonType())
-                            .chatBatonDuration(dto.getChatBatonDuration())
-                            .profileImageUrl(dto.getProfileImageUrl())
-                            .nickname(dto.getNickname())
-                            // 학생 → 학력 | 직장인 → 직무
-                            .section(dto.getEducationName() != null ? dto.getEducationName() : dto.getJobName())
-                            // 학생 → 전공 | 직장인 → 세부 직무
-                            .division(dto.getMajorName() != null ? dto.getMajorName() : dto.getSubJobName())
-                            .careerYears(dto.getCareerYears())
-                            .dueInDays(dueInDays)
-                            .build();
-                }).toList();
-    }
-
-    private static long calculateDueInDays(LocalDateTime createdAt) {
-        LocalDateTime dueDate = createdAt.plusHours(Constants.PENDING_BATON_EXPIRATION_HOURS);
-        long daysLeft = ChronoUnit.DAYS.between(LocalDateTime.now(), dueDate);
-        return Math.max(daysLeft, 0);
     }
 
 }

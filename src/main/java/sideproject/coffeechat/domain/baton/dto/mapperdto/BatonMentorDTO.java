@@ -1,16 +1,9 @@
 package sideproject.coffeechat.domain.baton.dto.mapperdto;
 
 import lombok.Getter;
-import sideproject.coffeechat.domain.baton.entity.BatonType;
 
 @Getter
-public class RequestedBatonDTO {
-
-    private Long batonId;
-
-    private BatonType batonType;
-
-    private String chatBatonDuration;
+public class BatonMentorDTO {
 
     private String profileImageUrl;
 
@@ -23,5 +16,7 @@ public class RequestedBatonDTO {
     private String subJobName;
 
     private Integer careerYears;
+
+    private String shortDescription;
 
 }

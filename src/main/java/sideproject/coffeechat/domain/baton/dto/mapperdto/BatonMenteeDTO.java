@@ -1,18 +1,10 @@
 package sideproject.coffeechat.domain.baton.dto.mapperdto;
 
-import java.time.LocalDateTime;
 import lombok.Getter;
-import sideproject.coffeechat.domain.baton.entity.BatonType;
 import sideproject.coffeechat.domain.member.entity.MemberType;
 
 @Getter
-public class PendingBatonDTO {
-
-    private Long batonId;
-
-    private BatonType batonType;
-
-    private String chatBatonDuration;
+public class BatonMenteeDTO {
 
     private MemberType memberType;
 
@@ -29,7 +21,5 @@ public class PendingBatonDTO {
     private String subJobName; // for WORKER
 
     private Integer careerYears; // for WORKER
-
-    private LocalDateTime createdAt;
 
 }

@@ -7,6 +7,7 @@
 
     <select id="getRequestedBatons" resultType="sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedBatonDTO">
         SELECT
+            b.id AS batonId,
             b.baton_type AS batonType,
             b.charge AS chatBatonDuration,
             mem.profile_image_url AS profileImageUrl,
@@ -28,12 +29,13 @@
             AND b.baton_type = #{batonType}
         </if>
 
-        ORDER BY b.id ASC
+        ORDER BY b.id DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
 
     <select id="getPendingBatons" resultType="sideproject.coffeechat.domain.baton.dto.mapperdto.PendingBatonDTO">
         SELECT
+            b.id AS batonId,
             b.baton_type AS batonType,
             b.charge AS chatBatonDuration,
             m.member_type AS memberType,
@@ -57,8 +59,75 @@
             AND b.baton_type = #{batonType}
         </if>
 
-        ORDER BY b.id ASC
+        ORDER BY b.id DESC
         LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="getRequestedChatBaton"
+            resultMap="sideproject.coffeechat.domain.baton.repository.BatonResultMap.RequestedChatBatonDTOMap">
+        SELECT
+            b.id AS batonId,
+            b.baton_type AS batonType,
+            b.charge AS charge,
+            b.pre_question AS preQuestion,
+            b.attachment_url AS attachmentUrl,
+
+            mem.profile_image_url AS profileImageUrl,
+            mem.nickname AS nickname,
+            m.company_name AS companyName,
+            mem.job_name AS jobName,
+            mem.sub_job_name AS subJobName,
+            mem.career_years AS careerYears,
+            m.short_description AS shortDescription,
+
+            t.id AS timeSlotId,
+            t.date AS date,
+            t.start_time AS startTime,
+            t.end_time AS endTime,
+            t.priority AS priority
+
+        FROM baton b
+        JOIN mentor m ON b.mentor_id = m.id
+        JOIN members mem ON m.worker_id = mem.id
+        LEFT JOIN chat_time_slot t ON b.id = t.baton_id
+
+        WHERE b.id = #{batonId} AND b.baton_type = 'CHAT' AND b.status = 'REQUESTED'
+
+        ORDER BY t.priority ASC
+    </select>
+
+    <select id="getPendingChatBaton"
+            resultMap="sideproject.coffeechat.domain.baton.repository.BatonResultMap.PendingBatonDTOMap">
+        SELECT
+            b.id AS batonId,
+            b.baton_type AS batonType,
+            b.charge AS charge,
+            b.pre_question AS preQuestion,
+            b.attachment_url AS attachmentUrl,
+            b.created_at AS createdAt,
+
+            m.member_type AS memberType,
+            m.profile_image_url AS profileImageUrl,
+            m.nickname AS nickname,
+            m.education_name AS educationName,
+            m.major_name AS majorName,
+            m.job_name AS jobName,
+            m.sub_job_name AS subJobName,
+            m.career_years AS careerYears,
+
+            t.id AS timeSlotId,
+            t.date AS date,
+            t.start_time AS startTime,
+            t.end_time AS endTime,
+            t.priority AS priority
+
+        FROM baton b
+        JOIN members m ON b.mentee_id = m.id
+        LEFT JOIN chat_time_slot t ON b.id = t.baton_id
+
+        WHERE b.id = #{batonId} AND b.baton_type = 'CHAT' AND b.status = 'REQUESTED'
+
+        ORDER BY t.priority ASC
     </select>
 
 </mapper>
