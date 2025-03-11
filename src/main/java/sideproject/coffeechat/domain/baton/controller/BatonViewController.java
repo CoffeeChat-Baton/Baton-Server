@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sideproject.coffeechat.domain.baton.dto.response.ChatBatonResponse;
 import sideproject.coffeechat.domain.baton.dto.response.CompactBatonResponse;
 import sideproject.coffeechat.domain.baton.entity.BatonType;
 import sideproject.coffeechat.domain.baton.service.BatonViewService;
@@ -44,5 +46,12 @@ public class BatonViewController {
                 batonViewService.getPendingBatons(authentication.getName(), page, size, batonType)
         );
     }
-    
+
+    @GetMapping("/requested/chat/{batonId}")
+    public Response<ChatBatonResponse> getRequestedChatBaton(@PathVariable Long batonId) {
+        return Response.success(
+                batonViewService.getRequestedChatBaton(batonId)
+        );
+    }
+
 }
