@@ -1,7 +1,9 @@
 package sideproject.coffeechat.domain.baton.entity;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum Charge {
 

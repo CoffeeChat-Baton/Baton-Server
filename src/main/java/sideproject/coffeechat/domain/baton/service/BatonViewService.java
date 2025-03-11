@@ -36,6 +36,14 @@ public class BatonViewService {
         return BatonViewConverter.toPendingBatonResponseList(dtos);
     }
 
+    public ChatBatonResponse getRequestedChatBaton(Long batonId) {
+        RequestedChatBatonDTO dto = batonMapper.getRequestedChatBaton(batonId);
+        if (dto == null) {
+            throw new BatonException(BATON_NOT_FOUND, "RequestedChatBaton NOT FOUND for batonId : " + batonId);
+        }
+        return BatonViewConverter.toRequestedChatBatonResponse(dto);
+    }
+
     }
 
 }

@@ -22,6 +22,9 @@ public enum ErrorCode {
     // MentorException
     MENTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "Mentor not found."),
 
+    // BatonException
+    BATON_NOT_FOUND(HttpStatus.NOT_FOUND, "Baton not found."),
+
     //CustomException
     S3_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S3 error."),
     ;

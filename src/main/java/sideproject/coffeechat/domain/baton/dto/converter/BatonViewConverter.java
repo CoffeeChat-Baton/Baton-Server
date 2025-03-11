@@ -62,6 +62,44 @@ public class BatonViewConverter {
                 }).toList();
     }
 
+    public static ChatBatonResponse toRequestedChatBatonResponse(RequestedChatBatonDTO dto) {
+        return ChatBatonResponse.builder()
+                .batonId(dto.getBatonId())
+                .batonType(dto.getBatonType())
+                .mentor(toBatonMentorResponse(dto.getMentor()))
+                .chatBatonDuration(dto.getCharge().name())
+                .availableSchedules(toChatTimeSlotResponseList(dto.getAvailableSchedules()))
+                .preQuestion(dto.getPreQuestion())
+                .attachmentUrl(dto.getAttachmentUrl())
+                .fee(dto.getCharge().getFee())
+                .build();
+    }
+
+    private static BatonMentorResponse toBatonMentorResponse(BatonMentorDTO dto) {
+        return BatonMentorResponse.builder()
+                .profileImageUrl(dto.getProfileImageUrl())
+                .nickname(dto.getNickname())
+                .companyName(dto.getCompanyName())
+                .jobName(dto.getJobName())
+                .subJobName(dto.getSubJobName())
+                .careerYears(dto.getCareerYears())
+                .shortDescription(dto.getShortDescription())
+                .build();
+    }
+
+    private static List<ChatTimeSlotResponse> toChatTimeSlotResponseList(List<ChatTimeSlotDTO> dtos) {
+        return dtos.stream()
+                .map(dto -> {
+                    return ChatTimeSlotResponse.builder()
+                            .timeSlotId(dto.getTimeSlotId())
+                            .date(dto.getDate())
+                            .startTime(dto.getStartTime())
+                            .endTime(dto.getEndTime())
+                            .priority(dto.getPriority())
+                            .build();
+                }).toList();
+    }
+
     private static LocalDateTime calculateDueDate(LocalDateTime createdAt) {
         return createdAt.plusHours(Constants.PENDING_BATON_EXPIRATION_HOURS);
     }
