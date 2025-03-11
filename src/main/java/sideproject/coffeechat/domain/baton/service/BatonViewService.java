@@ -44,6 +44,12 @@ public class BatonViewService {
         return BatonViewConverter.toRequestedChatBatonResponse(dto);
     }
 
+    public ChatBatonResponse getPendingChatBaton(Long batonId) {
+        PendingChatBatonDTO dto = batonMapper.getPendingChatBaton(batonId);
+        if (dto == null) {
+            throw new BatonException(BATON_NOT_FOUND, "PendingChatBaton NOT FOUND for batonId : " + batonId);
+        }
+        return BatonViewConverter.toPendingChatBatonResponse(dto);
     }
 
 }

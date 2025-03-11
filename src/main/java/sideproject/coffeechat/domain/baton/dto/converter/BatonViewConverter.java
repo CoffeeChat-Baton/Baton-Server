@@ -75,6 +75,20 @@ public class BatonViewConverter {
                 .build();
     }
 
+    public static ChatBatonResponse toPendingChatBatonResponse(PendingChatBatonDTO dto) {
+        return ChatBatonResponse.builder()
+                .batonId(dto.getBatonId())
+                .batonType(dto.getBatonType())
+                .dueTime(calculateDueDate(dto.getCreatedAt()))
+                .mentee(toBatonMenteeResponse(dto.getMentee()))
+                .chatBatonDuration(dto.getCharge().name())
+                .availableSchedules(toChatTimeSlotResponseList(dto.getAvailableSchedules()))
+                .preQuestion(dto.getPreQuestion())
+                .attachmentUrl(dto.getAttachmentUrl())
+                .fee(dto.getCharge().getFee())
+                .build();
+    }
+
     private static BatonMentorResponse toBatonMentorResponse(BatonMentorDTO dto) {
         return BatonMentorResponse.builder()
                 .profileImageUrl(dto.getProfileImageUrl())
@@ -84,6 +98,18 @@ public class BatonViewConverter {
                 .subJobName(dto.getSubJobName())
                 .careerYears(dto.getCareerYears())
                 .shortDescription(dto.getShortDescription())
+                .build();
+    }
+
+    private static BatonMenteeResponse toBatonMenteeResponse(BatonMenteeDTO dto) {
+        MemberType memberType = dto.getMemberType();
+        return BatonMenteeResponse.builder()
+                .memberType(memberType)
+                .profileImageUrl(dto.getProfileImageUrl())
+                .nickname(dto.getNickname())
+                .division(getDivision(memberType, dto.getEducationName(), dto.getJobName()))
+                .section(getSection(memberType, dto.getMajorName(), dto.getSubJobName()))
+                .careerYears(dto.getCareerYears())
                 .build();
     }
 
