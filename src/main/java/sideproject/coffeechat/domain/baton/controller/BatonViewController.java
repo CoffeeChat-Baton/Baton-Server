@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import sideproject.coffeechat.domain.baton.dto.response.ChatBatonResponse;
 import sideproject.coffeechat.domain.baton.dto.response.CompactBatonResponse;
+import sideproject.coffeechat.domain.baton.dto.response.PortfolioBatonResponse;
 import sideproject.coffeechat.domain.baton.entity.BatonType;
 import sideproject.coffeechat.domain.baton.service.BatonViewService;
 import sideproject.coffeechat.global.response.Response;
@@ -59,6 +60,13 @@ public class BatonViewController {
     public Response<ChatBatonResponse> getPendingChatBaton(@PathVariable Long batonId) {
         return Response.success(
                 batonViewService.getPendingChatBaton(batonId)
+        );
+    }
+
+    @GetMapping("/uncompleted/portfolio/{batonId}")
+    public Response<PortfolioBatonResponse> getUncompletedPortfolioBaton(@PathVariable Long batonId) {
+        return Response.success(
+                batonViewService.getUncompletedPortfolioBaton(batonId)
         );
     }
 
