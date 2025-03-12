@@ -1,7 +1,10 @@
 package sideproject.coffeechat.domain.baton.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,5 +21,9 @@ public class PortfolioBaton extends Baton {
     private LocalDate deadline;
 
     private String questionContent;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(20)")
+    private PortfolioCharge charge;
 
 }

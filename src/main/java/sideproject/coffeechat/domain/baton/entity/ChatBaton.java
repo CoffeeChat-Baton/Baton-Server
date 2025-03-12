@@ -1,6 +1,7 @@
 package sideproject.coffeechat.domain.baton.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -23,6 +24,7 @@ import lombok.experimental.SuperBuilder;
 public class ChatBaton extends Baton {
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(20)")
     private ChatCharge charge;
 
     @OneToMany(mappedBy = "baton", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
