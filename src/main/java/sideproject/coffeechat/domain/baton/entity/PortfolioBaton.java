@@ -26,4 +26,6 @@ public class PortfolioBaton extends Baton {
     @Column(columnDefinition = "VARCHAR(20)")
     private PortfolioCharge charge;
 
+    private String feedback;
+
 }
