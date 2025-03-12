@@ -11,8 +11,10 @@ import sideproject.coffeechat.domain.baton.dto.mapperdto.PendingBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.PendingChatBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedChatBatonDTO;
+import sideproject.coffeechat.domain.baton.dto.mapperdto.UncompletedPortfolioBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.response.ChatBatonResponse;
 import sideproject.coffeechat.domain.baton.dto.response.CompactBatonResponse;
+import sideproject.coffeechat.domain.baton.dto.response.PortfolioBatonResponse;
 import sideproject.coffeechat.domain.baton.entity.BatonType;
 import sideproject.coffeechat.domain.baton.repository.BatonMapper;
 import sideproject.coffeechat.global.response.exception.BatonException;
@@ -50,6 +52,14 @@ public class BatonViewService {
             throw new BatonException(BATON_NOT_FOUND, "PendingChatBaton NOT FOUND for batonId : " + batonId);
         }
         return BatonViewConverter.toPendingChatBatonResponse(dto);
+    }
+
+    public PortfolioBatonResponse getUncompletedPortfolioBaton(Long batonId) {
+        UncompletedPortfolioBatonDTO dto = batonMapper.getUncompletedPortfolioBaton(batonId);
+        if (dto == null) {
+            throw new BatonException(BATON_NOT_FOUND, "UncompletedPortfolioBaton NOT FOUND for batonId : " + batonId);
+        }
+        return BatonViewConverter.toUncompletedPortfolioBatonResponse(dto);
     }
 
 }

@@ -6,6 +6,7 @@ import sideproject.coffeechat.domain.baton.dto.mapperdto.PendingBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.PendingChatBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedChatBatonDTO;
+import sideproject.coffeechat.domain.baton.dto.mapperdto.UncompletedPortfolioBatonDTO;
 import sideproject.coffeechat.domain.baton.entity.BatonType;
 
 @Mapper
@@ -18,5 +19,7 @@ public interface BatonMapper {
     RequestedChatBatonDTO getRequestedChatBaton(Long batonId);
 
     PendingChatBatonDTO getPendingChatBaton(Long batonId);
+
+    UncompletedPortfolioBatonDTO getUncompletedPortfolioBaton(Long batonId);
 
 }

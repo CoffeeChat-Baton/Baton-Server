@@ -13,11 +13,13 @@ import sideproject.coffeechat.domain.baton.dto.mapperdto.PendingBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.PendingChatBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedChatBatonDTO;
+import sideproject.coffeechat.domain.baton.dto.mapperdto.UncompletedPortfolioBatonDTO;
 import sideproject.coffeechat.domain.baton.dto.response.BatonMenteeResponse;
 import sideproject.coffeechat.domain.baton.dto.response.BatonMentorResponse;
 import sideproject.coffeechat.domain.baton.dto.response.ChatBatonResponse;
 import sideproject.coffeechat.domain.baton.dto.response.ChatTimeSlotResponse;
 import sideproject.coffeechat.domain.baton.dto.response.CompactBatonResponse;
+import sideproject.coffeechat.domain.baton.dto.response.PortfolioBatonResponse;
 import sideproject.coffeechat.domain.member.entity.MemberType;
 import sideproject.coffeechat.global.Constants;
 
@@ -70,6 +72,18 @@ public class BatonViewConverter {
                 .chatBatonDuration(dto.getCharge().name())
                 .availableSchedules(toChatTimeSlotResponseList(dto.getAvailableSchedules()))
                 .preQuestion(dto.getPreQuestion())
+                .attachmentUrl(dto.getAttachmentUrl())
+                .fee(dto.getCharge().getFee())
+                .build();
+    }
+
+    public static PortfolioBatonResponse toUncompletedPortfolioBatonResponse(UncompletedPortfolioBatonDTO dto) {
+        return PortfolioBatonResponse.builder()
+                .batonId(dto.getBatonId())
+                .batonType(dto.getBatonType())
+                .mentor(toBatonMentorResponse(dto.getMentor()))
+                .deadline(dto.getDeadline())
+                .questionContent(dto.getQuestionContent())
                 .attachmentUrl(dto.getAttachmentUrl())
                 .fee(dto.getCharge().getFee())
                 .build();
@@ -149,5 +163,4 @@ public class BatonViewConverter {
         }
         throw new IllegalArgumentException("Unsupported memberType: " + memberType);
     }
-
 }
