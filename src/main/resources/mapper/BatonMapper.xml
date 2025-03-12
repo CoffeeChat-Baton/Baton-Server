@@ -5,7 +5,8 @@
 
 <mapper namespace="sideproject.coffeechat.domain.baton.repository.BatonMapper">
 
-    <select id="getRequestedBatons" resultType="sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedBatonDTO">
+    <select id="getRequestedBatons"
+            resultType="sideproject.coffeechat.domain.baton.dto.mapperdto.RequestedBatonDTO">
         SELECT
             b.id AS batonId,
             b.baton_type AS batonType,
@@ -33,7 +34,8 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
-    <select id="getPendingBatons" resultType="sideproject.coffeechat.domain.baton.dto.mapperdto.PendingBatonDTO">
+    <select id="getPendingBatons"
+            resultType="sideproject.coffeechat.domain.baton.dto.mapperdto.PendingBatonDTO">
         SELECT
             b.id AS batonId,
             b.baton_type AS batonType,
@@ -72,6 +74,7 @@
             b.pre_question AS preQuestion,
             b.attachment_url AS attachmentUrl,
 
+            -- 멘토 정보
             mem.profile_image_url AS profileImageUrl,
             mem.nickname AS nickname,
             m.company_name AS companyName,
@@ -80,6 +83,7 @@
             mem.career_years AS careerYears,
             m.short_description AS shortDescription,
 
+            -- 채팅 희망 시간 정보
             t.id AS timeSlotId,
             t.date AS date,
             t.start_time AS startTime,
@@ -96,6 +100,32 @@
         ORDER BY t.priority ASC
     </select>
 
+    <select id="getUncompletedPortfolioBaton"
+            resultMap="sideproject.coffeechat.domain.baton.repository.BatonResultMap.UncompletedPortfolioBatonDTOMap">
+        SELECT
+            b.id AS batonId,
+            b.baton_type AS batonType,
+            b.deadline AS deadline,
+            b.question_content AS questionContent,
+            b.charge AS charge,
+            b.attachment_url AS attachmentUrl,
+
+            -- 멘토 정보
+            mem.profile_image_url AS profileImageUrl,
+            mem.nickname AS nickname,
+            m.company_name AS companyName,
+            mem.job_name AS jobName,
+            mem.sub_job_name AS subJobName,
+            mem.career_years AS careerYears,
+            m.short_description AS shortDescription
+
+        FROM baton b
+        JOIN mentor m ON b.mentor_id = m.id
+        JOIN members mem ON m.worker_id = mem.id
+
+        WHERE b.id = #{batonId} AND b.baton_type = 'PORTFOLIO' AND b.status NOT IN ('COMPLETED', 'CANCELLED')
+    </select>
+
     <select id="getPendingChatBaton"
             resultMap="sideproject.coffeechat.domain.baton.repository.BatonResultMap.PendingBatonDTOMap">
         SELECT
@@ -106,6 +136,7 @@
             b.attachment_url AS attachmentUrl,
             b.created_at AS createdAt,
 
+            -- 멘티 정보
             m.member_type AS memberType,
             m.profile_image_url AS profileImageUrl,
             m.nickname AS nickname,
@@ -115,6 +146,7 @@
             m.sub_job_name AS subJobName,
             m.career_years AS careerYears,
 
+            -- 채팅 희망 시간 정보
             t.id AS timeSlotId,
             t.date AS date,
             t.start_time AS startTime,

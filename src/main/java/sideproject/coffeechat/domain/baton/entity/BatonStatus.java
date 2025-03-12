@@ -6,6 +6,7 @@ public enum BatonStatus {
     ACCEPTED,
     REJECTED,
     COMPLETED,
+    CANCELLED,
     ;
 
 }
