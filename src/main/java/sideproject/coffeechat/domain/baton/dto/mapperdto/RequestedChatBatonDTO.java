@@ -3,7 +3,7 @@ package sideproject.coffeechat.domain.baton.dto.mapperdto;
 import java.util.List;
 import lombok.Getter;
 import sideproject.coffeechat.domain.baton.entity.BatonType;
-import sideproject.coffeechat.domain.baton.entity.Charge;
+import sideproject.coffeechat.domain.baton.entity.ChatCharge;
 
 @Getter
 public class RequestedChatBatonDTO {
@@ -12,7 +12,7 @@ public class RequestedChatBatonDTO {
 
     private BatonType batonType;
 
-    private Charge charge;
+    private ChatCharge charge;
 
     private String preQuestion;
 

@@ -23,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 public class ChatBaton extends Baton {
 
     @Enumerated(EnumType.STRING)
-    private Charge charge;
+    private ChatCharge charge;
 
     @OneToMany(mappedBy = "baton", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default

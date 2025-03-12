@@ -10,7 +10,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import sideproject.coffeechat.domain.baton.entity.Charge;
+import sideproject.coffeechat.domain.baton.entity.ChatCharge;
 import sideproject.coffeechat.global.validator.HasPriority;
 import sideproject.coffeechat.global.validator.TimeRangeProvider;
 import sideproject.coffeechat.global.validator.UniquePriority;
@@ -22,7 +22,7 @@ import sideproject.coffeechat.global.validator.ValidStartEndTime;
 public class ChatBatonRegisterRequest {
 
     @NotNull
-    private Charge charge;
+    private ChatCharge charge;
 
     @NotNull
     @Size(max = 3)

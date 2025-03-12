@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Charge {
+public enum ChatCharge {
 
     TWENTY_MINUTES(20, 14900),
     THIRTY_MINUTES(30, 19900),
